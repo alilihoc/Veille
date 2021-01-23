@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="style.css" media="screen">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Amethysta" type="text/css">
+    <title>Document</title>
+</head>
+<body>
+    <div id="head">
+        <form action="#">
+            <input type="text" name="q" id="search">
+        </form>
+    </div>
+    <div class="container">
+
+    </div>
+
+</body>
+
+<script >
+    let search = document.querySelector('#search');
+
+    search.addEventListener('keyup', function(e){
+        console.log("normal function");
+    });
+
+    search.addEventListener('keyup', debounce(function(e){
+        console.log("debounce function");
+    }, 500));
+
+    window.addEventListener('scroll', function(e){
+        console.log("normal function");
+    });
+
+    window.addEventListener('scroll', throttle(function(e){
+        console.log("throttle function");
+    }, 250));
+
+    function debounce(callback, delay){
+        var timer;
+        return function(){
+            var args = arguments;
+            var context = this;
+            clearTimeout(timer);
+            timer = setTimeout(function(){
+                callback.apply(context, args);
+            }, delay)
+        }
+    }
+
+    function throttle(callback, delay) {
+        var last;
+        var timer;
+        return function () {
+            var context = this;
+            var now = + new Date();
+            var args = arguments;
+            if (last && now < last + delay) {
+                // le délai n'est pas écoulé on reset le timer
+                clearTimeout(timer);
+                timer = setTimeout(function () {
+                    last = now;
+                    callback.apply(context, args);
+                }, delay);
+            } else {
+                last = now;
+                callback.apply(context, args);
+            }
+        };
+    }
+
+</script>
+
+</html>

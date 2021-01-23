@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="style.css" media="screen">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Amethysta" type="text/css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="wrap">
+        <h1> Effet feuilles superposés en CSS3</h1>
+        <div class="feuilles">
+
+        </div>
+        <pre>
+            <code>
+.feuilles
+{
+    height: 300px;
+    background: #FFF;
+    -webkit-box-shadow:
+            0 1px 1px rgba(0,0,0,0.40), /* 1st shadow */
+            0 5px 0 -2px #F7F7F7, /* 2nd feuille */
+            0 6px 1px -2px rgba(0,0,0,0.40), /* 2nd shadow */
+            0 10px 0 -4px #F7F7F7, /* 3rd feuille */
+            0 10px 1px -4px rgba(0,0,0,0.40); /* 3rd shadow */
+    box-shadow:
+            0 1px 1px rgba(0,0,0,0.40),
+            0 5px 0 -2px #F7F7F7,
+            0 6px 1px -2px rgba(0,0,0,0.40),
+            0 10px 0 -4px #F7F7F7,
+            0 11px 1px -4px rgba(0,0,0,0.40);
+}
+            </code>
+        </pre>
+
+    </div>
+</body>
+</html>

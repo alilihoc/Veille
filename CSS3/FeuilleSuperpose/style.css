@@ -1,0 +1,40 @@
+body {
+    background: url('woodpattern.jpg');
+}
+
+h1 {
+    font-family: 'Amethsyta', serif;
+    color: #232323;
+    text-shadow: 1px 1px 0 rgba(255,255,255,0.20);
+    text-align: center;
+}
+
+.wrap {
+    width: 600px;
+    margin: 0 auto;
+}
+
+.feuilles
+{
+    height: 300px;
+    background: #FFF;
+    -webkit-box-shadow:
+            0 1px 1px rgba(0,0,0,0.40), /* 1st shadow */
+            0 5px 0 -2px #F7F7F7, /* 2nd feuille */
+            0 6px 1px -2px rgba(0,0,0,0.40), /* 2nd shadow */
+            0 10px 0 -4px #F7F7F7, /* 3rd feuille */
+            0 10px 1px -4px rgba(0,0,0,0.40); /* 3rd shadow */
+    box-shadow:
+            0 1px 1px rgba(0,0,0,0.40),
+            0 5px 0 -2px #F7F7F7,
+            0 6px 1px -2px rgba(0,0,0,0.40),
+            0 10px 0 -4px #F7F7F7,
+            0 11px 1px -4px rgba(0,0,0,0.40);
+}
+
+pre {
+    margin-top: 50px;
+    color: #FFF;
+    background-color: #272822;
+    position: relative;
+}
