@@ -24,19 +24,19 @@
 <script >
     let search = document.querySelector('#search');
 
-    search.addEventListener('keyup', function(e){
+    search.addEventListener('keyup', function(){
         console.log("normal function");
     });
 
-    search.addEventListener('keyup', debounce(function(e){
+    search.addEventListener('keyup', debounce(function(){
         console.log("debounce function");
     }, 500));
 
-    window.addEventListener('scroll', function(e){
+    window.addEventListener('scroll', function(){
         console.log("normal function");
     });
 
-    window.addEventListener('scroll', throttle(function(e){
+    window.addEventListener('scroll', throttle(function(){
         console.log("throttle function");
     }, 250));
 
@@ -60,7 +60,6 @@
             var now = + new Date();
             var args = arguments;
             if (last && now < last + delay) {
-                // le délai n'est pas écoulé on reset le timer
                 clearTimeout(timer);
                 timer = setTimeout(function () {
                     last = now;

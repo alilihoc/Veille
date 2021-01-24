@@ -5,6 +5,10 @@ export default class RepLogCreator extends Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            quantityInputError : ''
+        };
+
         this.quantityInput = React.createRef();
         this.itemSelect = React.createRef();
 
@@ -15,10 +19,10 @@ export default class RepLogCreator extends Component {
             { id : 'coffee_cup', text: 'Coffee cup'},
         ];
 
-        this.handleFormSumbit = this.handleFormSumbit.bind(this);
+        this.handleFormSubmit = this.handleFormSubmit.bind(this);
     }
 
-    handleFormSumbit(event) {
+    handleFormSubmit(event) {
         event.preventDefault();
         const {onAddRepLog} = this.props;
 
@@ -26,24 +30,32 @@ export default class RepLogCreator extends Component {
         const itemSelect = this.itemSelect.current;
 
         if (quantityInput.value <= 0) {
-
+            this.setState({
+                quantityInputError: 'Please enter a value greater than 10'
+            });
 
             return;
         }
 
         onAddRepLog(
-            itemSelect.options[itemSelect.selectedIndex].text,
+            itemSelect.options[itemSelect.selectedIndex].value,
             quantityInput.value
         );
 
         quantityInput.value = '';
         itemSelect.value= '';
+
+        this.setState({
+            quantityInputError: ''
+        });
     }
 
 
     render() {
+        const quantityInputError = this.state.quantityInputError;
+
         return (
-            <form className="form-inline" onSubmit={this.handleFormSumbit}>
+            <form onSubmit={this.handleFormSubmit}>
                 <div className="form-group">
                     <label className="sr-only control-label required" htmlFor="rep_log_item">
                         What did you lift?
@@ -59,7 +71,7 @@ export default class RepLogCreator extends Component {
                     </select>
                 </div>
                 {' '}
-                <div className="form-group">
+                <div className={`form-group ${quantityInputError ? 'has-error' : '' }`}>
                     <label className="sr-only control-label required" htmlFor="rep_log_reps">
                         How many times?
                     </label>
@@ -68,6 +80,7 @@ export default class RepLogCreator extends Component {
                            required="required"
                            placeholder="How many times?"
                            className="form-control"/>
+                    {quantityInputError && <span className="help-block">{quantityInputError}</span>}
                 </div>
                 {' '}
                 <button type="submit" className="btn btn-primary">I Lifted it!</button>

@@ -13,10 +13,14 @@ function calculateTotalWeightLifted(repLogs) {
 }
 
 export default function RepLogs({
-        onRowClick,
         highlightedRowId,
+        isSavingNewRepLog,
+        successMessage,
+        isLoaded,
         repLogs,
-        onAddRepLog
+        onAddRepLog,
+        onDeleteRepLog,
+        onRowClick,
     }) {
 
     return (
@@ -24,6 +28,9 @@ export default function RepLogs({
             <h2>
                 Lift History
             </h2>
+            {successMessage && (
+                <div className="alert alert-success">{successMessage}</div>
+            )}
             <table className="table table-striped">
                 <thead>
                 <tr>
@@ -37,6 +44,9 @@ export default function RepLogs({
                     highlightedRowId={highlightedRowId}
                     repLogs={repLogs}
                     onRowClick={onRowClick}
+                    onDeleteRepLog={onDeleteRepLog}
+                    isLoaded={isLoaded}
+                    isSavingNewRepLog={isSavingNewRepLog}
                 />
                 <tfoot>
                 <tr>
@@ -48,7 +58,14 @@ export default function RepLogs({
                 </tfoot>
             </table>
 
-            <RepLogCreator onAddRepLog={onAddRepLog}/>
+            <div className="row">
+                <div className="col-md-6">
+                    <RepLogCreator
+                        onAddRepLog={onAddRepLog}
+                        onDeleteRepLog={onDeleteRepLog}
+                    />
+                </div>
+            </div>
 
         </div>
     )
@@ -56,7 +73,11 @@ export default function RepLogs({
 
 RepLogs.propTypes = {
     highlightedRowId: PropTypes.any,
+    isLoaded: PropTypes.bool.isRequired,
+    isSavingNewRepLog: PropTypes.bool.isRequired,
+    successMessage: PropTypes.string.isRequired,
     onRowClick: PropTypes.func.isRequired,
     onAddRepLog: PropTypes.func.isRequired,
+    onDeleteRepLog: PropTypes.func.isRequired,
     repLogs: PropTypes.array.isRequired
 };

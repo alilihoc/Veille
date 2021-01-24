@@ -1,45 +1,109 @@
 import React, {Component} from "react";
 import RepLogs from "./RepLogs";
-import PropTypes from 'prop-types';
-import {v4 as uuid} from 'uuid';
+import {getRepLogs, deleteRepLog, createRepLog} from "../api/rep_log_api";
 
 
 export default class RepLogApp extends Component {
-    constructor (props) {
+
+    constructor(props) {
         super(props);
+
         this.state = {
             highlightedRowId: null,
-            repLogs: [
-                {id: uuid(), reps: '15', itemLabel: 'My Laptop', totalWeightLifted: 180},
-                {id: uuid(), reps: '15', itemLabel: 'My Cat', totalWeightLifted: 170},
-                {id: uuid(), reps: '15', itemLabel: 'My Kitchen', totalWeightLifted: 1180},
-            ]
+            repLogs: [],
+            isLoaded: false,
+            isSavingNewRepLog: false,
+            successMessage: ''
         };
+
+        this.successMessageTimeoutHandle = 0;
 
         this.handleRowClick = this.handleRowClick.bind(this);
         this.handleAddRepLog = this.handleAddRepLog.bind(this);
+        this.handleDeleteRepLogItem = this.handleDeleteRepLogItem.bind(this);
+    }
+
+    componentDidMount() {
+        getRepLogs()
+            .then((data) => {
+                this.setState({
+                    repLogs: data,
+                    isLoaded: true
+                });
+            });
+    }
+
+    componentWillUnmount() {
+        clearTimeout(this.successMessageTimeoutHandle);
     }
 
     handleRowClick(replogId) {
         this.setState({highlightedRowId: replogId});
     }
 
-    handleAddRepLog(itemLabel, reps) {
+    handleAddRepLog(item, reps) {
         const newRep = {
-            id: uuid(),
             reps: reps,
-            itemLabel: itemLabel,
-            totalWeightLifted: Math.floor(Math.random() * 50)
+            item: item,
         };
 
-        this.setState(prevState => {
-            const newRepLogs = [...prevState.repLogs, newRep];
+        this.setState({
+            isSavingNewRepLog: true,
+        });
 
-            return {repLogs:newRepLogs}
-        })
+        createRepLog(newRep)
+            .then(repLog => {
+                this.setState(prevState => {
+                    const newRepLogs = [...prevState.repLogs, repLog];
+
+                    return {
+                        repLogs: newRepLogs,
+                        isSavingNewRepLog: false,
+                        successMessage: this.setSuccessMessage( 'RepLog added successfully!')
+                    }
+                })
+            });
     }
 
+    setSuccessMessage(message) {
+        this.setState({
+            successMessage: message
 
+        });
+
+        clearTimeout(this.successMessageTimeoutHandle);
+        this.successMessageTimeoutHandle = setTimeout(() => {
+            this.setState({
+                successMessage: ''
+            });
+
+            this.successMessageTimeoutHandle = 0;
+        }, 3000);
+    }
+
+    handleDeleteRepLogItem(id) {
+        this.setState((prevState) => {
+           return {
+               repLogs : prevState.repLogs.map(replog => {
+                   if (replog.id !== id) return replog;
+                   return Object.assign({}, replog, {isDeleting: true})
+               })
+           }
+        });
+
+        deleteRepLog(id)
+            .then(() => {
+                this.setState((prevState) => {
+                    return {
+                        repLogs: prevState.repLogs.filter(repLog => repLog.id !== id)
+                    }
+                });
+
+                this.setSuccessMessage('Item was Un-Lifted!')
+            });
+
+
+    };
 
     render() {
         return <RepLogs
@@ -47,6 +111,7 @@ export default class RepLogApp extends Component {
             {...this.state}
             onRowClick={this.handleRowClick}
             onAddRepLog={this.handleAddRepLog}
+            onDeleteRepLog={this.handleDeleteRepLogItem}
         />
     }
 }
