@@ -16,6 +16,8 @@ export default function RepLogs({
         highlightedRowId,
         isSavingNewRepLog,
         successMessage,
+        itemOptions,
+        newRepLopValidationErrorMessage,
         isLoaded,
         repLogs,
         onAddRepLog,
@@ -63,6 +65,8 @@ export default function RepLogs({
                     <RepLogCreator
                         onAddRepLog={onAddRepLog}
                         onDeleteRepLog={onDeleteRepLog}
+                        validationErrorMessage={newRepLopValidationErrorMessage}
+                        itemOptions={itemOptions}
                     />
                 </div>
             </div>
@@ -75,9 +79,11 @@ RepLogs.propTypes = {
     highlightedRowId: PropTypes.any,
     isLoaded: PropTypes.bool.isRequired,
     isSavingNewRepLog: PropTypes.bool.isRequired,
+    newRepLopValidationErrorMessage: PropTypes.string.isRequired,
     successMessage: PropTypes.string.isRequired,
     onRowClick: PropTypes.func.isRequired,
     onAddRepLog: PropTypes.func.isRequired,
     onDeleteRepLog: PropTypes.func.isRequired,
-    repLogs: PropTypes.array.isRequired
+    repLogs: PropTypes.array.isRequired,
+    itemOptions: PropTypes.array.isRequired
 };

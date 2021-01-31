@@ -13,7 +13,9 @@ export default class RepLogApp extends Component {
             repLogs: [],
             isLoaded: false,
             isSavingNewRepLog: false,
-            successMessage: ''
+            successMessage: '',
+            newRepLopValidationErrorMessage: '',
+            itemOptions: props.itemOptions
         };
 
         this.successMessageTimeoutHandle = 0;
@@ -51,16 +53,32 @@ export default class RepLogApp extends Component {
             isSavingNewRepLog: true,
         });
 
+        const newState = {
+            isSavingNewRepLog: false,
+        };
+
         createRepLog(newRep)
             .then(repLog => {
                 this.setState(prevState => {
                     const newRepLogs = [...prevState.repLogs, repLog];
 
                     return {
+                        ...newState,
                         repLogs: newRepLogs,
-                        isSavingNewRepLog: false,
-                        successMessage: this.setSuccessMessage( 'RepLog added successfully!')
+                        successMessage: this.setSuccessMessage('RepLog added successfully!'),
+                        newRepLopValidationErrorMessage: ''
                     }
+                })
+            })
+            .catch(error => {
+                error.response.json().then(errorData => {
+                    const errors = errorData.errors;
+                    const firstError = errors[Object.keys(errors)[0]];
+
+                    this.setState({
+                        ...newState,
+                        newRepLopValidationErrorMessage: firstError
+                    })
                 })
             });
     }
@@ -83,12 +101,12 @@ export default class RepLogApp extends Component {
 
     handleDeleteRepLogItem(id) {
         this.setState((prevState) => {
-           return {
-               repLogs : prevState.repLogs.map(replog => {
-                   if (replog.id !== id) return replog;
-                   return Object.assign({}, replog, {isDeleting: true})
-               })
-           }
+            return {
+                repLogs: prevState.repLogs.map(replog => {
+                    if (replog.id !== id) return replog;
+                    return Object.assign({}, replog, {isDeleting: true})
+                })
+            }
         });
 
         deleteRepLog(id)
@@ -100,9 +118,7 @@ export default class RepLogApp extends Component {
                 });
 
                 this.setSuccessMessage('Item was Un-Lifted!')
-            });
-
-
+            })
     };
 
     render() {
@@ -115,4 +131,8 @@ export default class RepLogApp extends Component {
         />
     }
 }
+
+RepLogApp.defaultProps = {
+    itemOptions: []
+};
 

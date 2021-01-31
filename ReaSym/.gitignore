@@ -2,7 +2,7 @@
 /public/build/*
 
 ###> symfony/framework-bundle ###
-.env
+
 /app/
 /public/bundles/
 /var/
